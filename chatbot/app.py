@@ -8,8 +8,10 @@ from keras.models import load_model
 model = load_model('chatbot_model.h5')
 import json
 import random
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 intents = json.loads(open('intents.json').read())
 words = pickle.load(open('words.pkl','rb'))
@@ -76,4 +78,6 @@ def chatbot_response():
     text = data["text"]
     ints = predict_class(text, model)
     res = getResponse(text, ints, intents)
-    return res
+    response = jsonify(res)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
