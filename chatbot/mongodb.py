@@ -3,7 +3,6 @@ import pymongo
 #there can be an error when you must do this: !pip install pymongo["srv"]
 
 #must be in .env
-connection_string  = "mongodb+srv://admin:7xDrESBkRlyskzl9@cluster0.cp7z7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
 def connect_db(connection_string,verbose=False):
   try:
@@ -68,7 +67,19 @@ def define_response(text):
 
 
 if __name__ == "__main__":
+
   #test code here
+
+  from dotenv import load_dotenv
+  import os
+  load_dotenv("../.env")
+  load_dotenv(".env") #DEPEND ON THE WORKING DIRECTORY
+
+  
+  connection_string = os.environ.get("DB_CONNECTION")
+  print("THIS IS CONNECTION STRING: ",connection_string)
+
+
   terms = "index out of range python"
 
   exact_query = f"\"{terms}\""
