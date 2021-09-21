@@ -1,2 +1,5 @@
 /data_processing/data
 /chatbot/data
+.env
+/py_env
+/.vscode

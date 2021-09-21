@@ -5,17 +5,31 @@ lemmatizer = WordNetLemmatizer()
 import pickle
 import numpy as np
 from keras.models import load_model
-model = load_model('chatbot_model.h5')
+
 import json
 import random
 from flask_cors import CORS
 
+from dotenv import load_dotenv
+import os
+
+from mongodb import define_response, connect_db
+
+print("working directory ",os.getcwd())
+model = load_model('chatbot/chatbot_model.h5')
+
+load_dotenv("../.env")
+
 app = Flask(__name__)
 CORS(app)
 
-intents = json.loads(open('intents.json').read())
-words = pickle.load(open('words.pkl','rb'))
-classes = pickle.load(open('classes.pkl','rb'))
+
+intents = json.loads(open('chatbot/intents.json').read())
+words = pickle.load(open('chatbot/words.pkl','rb'))
+classes = pickle.load(open('chatbot/classes.pkl','rb'))
+
+connection_string = os.environ.get("DB_CONNECTION")
+db = connect_db(connection_string=connection_string ,verbose=False)
 
 def clean_up_sentence(sentence):
     # tokenize the pattern - split words into array
@@ -55,7 +69,7 @@ def predict_class(sentence, model):
 
 
 def getQuestionAnswer(sentence):
-    answer = sentence+' :get answer using text indexing'
+    answer = define_response(sentence)
     return answer
 
 
@@ -68,6 +82,7 @@ def getResponse(sentence, ints, intents_json):
         for i in list_of_intents:
             if(i['tag']== tag):
                 result = random.choice(i['responses'])
+                result = {"Body":result,"status":"OK"}
                 break
     return result
 
