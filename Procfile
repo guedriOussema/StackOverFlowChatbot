@@ -1,0 +1,1 @@
+web: gunicorn --chdir chatbot app:app

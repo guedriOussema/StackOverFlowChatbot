@@ -1,5 +1,8 @@
 /data_processing/data
 /chatbot/data
 .env
-/py_env
-/.vscode
+py_env
+.vscode
+/chatbot/__pycache__
+/chatbot/nltk_data/*
+env_vars.txt
